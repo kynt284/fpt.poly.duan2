@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">AnalogFilter</string>
+    <string name="app_name">Analog Filter</string>
+
+    <string name="tab_filters">Filters</string>
+    <string name="edit">Edit</string>
+    <string name="contract">Bright</string>
+    <string name="filter_normal">None</string>
+    <string name="gradient">Gradient</string>
+    <string name="dust">Grain</string>
+    <string name="light">Light</string>
+    <string name="threeDicon">3D</string>
+    <string name="str_provider">com.canhhh.kynt.analogfilter.fileprovider</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="exit">Everything changed will be lost, Press "exit" to leave the desk</string>
 </resources>

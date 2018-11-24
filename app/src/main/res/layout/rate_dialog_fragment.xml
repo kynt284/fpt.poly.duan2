@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:layout_gravity="center">
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_gravity="start"
+        android:background="@color/bg_title_open_dialog"
+        android:textSize="24sp"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/titleImageView"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_comment_arrow_right" />
+    </LinearLayout>
+
+        <TextView
+            android:text="How was your experience with us?"
+            android:textColor="@color/text_desc_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rateTextView"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:textAlignment="center" />
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ratingBar"
+            android:backgroundTint="@android:color/white"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp" />
+
+    </LinearLayout>
