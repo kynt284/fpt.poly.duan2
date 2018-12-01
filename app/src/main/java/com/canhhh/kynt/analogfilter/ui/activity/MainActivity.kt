@@ -27,6 +27,7 @@ import android.view.WindowManager
 import android.widget.SeekBar
 import android.widget.Toast
 import com.canhhh.kynt.analogfilter.R
+import com.canhhh.kynt.analogfilter.R.id.direct
 import com.canhhh.kynt.analogfilter.event.FiltersListFragmentListener
 import com.canhhh.kynt.analogfilter.event.OnClickDialog
 import com.canhhh.kynt.analogfilter.ui.adapter.ViewPagerAdapter
@@ -334,7 +335,7 @@ class MainActivity : AppCompatActivity(),
 
         moreImageView.setOnClickListener {
             val rateDialogFragment = RateDialogFragment()
-            rateDialogFragment.show(supportFragmentManager, "rateDialogFragment")
+            rateDialogFragment.show(supportFragmentManager, getString(R.string.rateDialogFragment))
         }
 
         shareImageView.setOnClickListener { saveImageToGallery() }
@@ -349,7 +350,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun showDialog() {
         val warningDialogFragment = ChoosePagerDialogFragment(this)
-        warningDialogFragment.show(supportFragmentManager, "warningDialogFragment")
+        warningDialogFragment.show(supportFragmentManager, getString(R.string.warningDialogFragment))
     }
 
 
@@ -450,7 +451,7 @@ class MainActivity : AppCompatActivity(),
                 startActivityForResult(cameraIntent, GET_IMAGE_CAMERA)
             }
         } catch (ex: IOException) {
-            Toast.makeText(applicationContext, "Photo file can't be created, please try again", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, getString(R.string.toas1), Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -665,7 +666,7 @@ class MainActivity : AppCompatActivity(),
                         if (report.areAllPermissionsGranted()) {
                             SaveImage(this@MainActivity).execute()
                         } else {
-                            Toast.makeText(applicationContext, "Permissions are not granted!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, getString(R.string.permission), Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -721,7 +722,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
         exitDialogFragment = ExitDialogFragment(this)
-        exitDialogFragment!!.show(supportFragmentManager, "exitDialogFragment")
+        exitDialogFragment!!.show(supportFragmentManager, getString(R.string.exitDialogFragment))
     }
 
 
@@ -731,8 +732,8 @@ class MainActivity : AppCompatActivity(),
 
         override fun onPreExecute() {
             super.onPreExecute()
-            dialog.setTitle("Save photo")
-            dialog.setMessage("Please wait")
+            dialog.setTitle(getString(R.string.save))
+            dialog.setMessage(getString(R.string.wait))
             dialog.max = 100
             dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
             dialog.isIndeterminate = true
@@ -743,6 +744,7 @@ class MainActivity : AppCompatActivity(),
 
 
         override fun doInBackground(vararg voids: Void): String? {
+            val filePath = Environment.getExternalStorageDirectory().toString() + "/Analog Filter"
             try {
                 val bitmap = finalBitmap
 
@@ -750,16 +752,16 @@ class MainActivity : AppCompatActivity(),
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteOutputStream)
                 val bitmapData = byteOutputStream.toByteArray()
                 val inputStream = ByteArrayInputStream(bitmapData)
-                val direct = File(Environment.getExternalStorageDirectory().toString() + "/Analog Filter")
+                val direct = File(filePath)
 
                 if (!direct.exists()) {
-                    val f = File(Environment.getExternalStorageDirectory().toString() + "/Analog Filter")
+                    val f = File(filePath)
                     f.mkdirs()
                 }
 
                 val fileName = "IMG_" + System.currentTimeMillis() + ".jpg"
 
-                val file = File(File(Environment.getExternalStorageDirectory().toString() + "/Analog Filter"), fileName)
+                val file = File(File(filePath), fileName)
 
                 if (file.exists()) {
                     file.delete()

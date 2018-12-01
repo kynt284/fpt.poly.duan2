@@ -6,15 +6,15 @@ class MyFilter {
     var mImageString : String = ""
 
 
-    constructor(mNameFilter: String, mImageInt: Int) {
-        this.mNameFilter = mNameFilter
-        this.mImageInt = mImageInt
+    constructor(nameFilter: String, imageInt: Int) {
+        mNameFilter = nameFilter
+        mImageInt = imageInt
     }
 
 
-    constructor(mNameFilter: String, mImageString: String) {
-        this.mNameFilter = mNameFilter
-        this.mImageString = mImageString
+    constructor(nameFilter: String, imageString: String) {
+        this.mNameFilter = nameFilter
+        this.mImageString = imageString
     }
 
 

@@ -23,7 +23,10 @@
         </activity>
 
         <activity android:name=".ui.activity.MainActivity" android:screenOrientation="portrait"/>
-
+        <meta-data
+                android:name="io.fabric.ApiKey"
+                android:value="e0e102474949db9ac8823a16f0cbc34b9325dbed"
+        />
         <provider
                 android:name="android.support.v4.content.FileProvider"
                 android:authorities="com.canhhh.kynt.analogfilter.fileprovider"

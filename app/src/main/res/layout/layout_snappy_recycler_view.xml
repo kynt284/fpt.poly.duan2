@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.canhhh.kynt.analogfilter.ui.custom.SnappyRecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:padding="4dp"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+
+</FrameLayout>

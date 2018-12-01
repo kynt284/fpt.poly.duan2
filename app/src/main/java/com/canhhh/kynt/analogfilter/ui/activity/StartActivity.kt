@@ -11,12 +11,13 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.Toast
 import com.canhhh.kynt.analogfilter.R
 import com.canhhh.kynt.analogfilter.event.OnClickDialog
 import com.canhhh.kynt.analogfilter.ui.dialog.ChooseDialogFragmentStart
 import com.canhhh.kynt.analogfilter.utills.ViewHelper
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_start.*
 import java.io.File
 import java.io.IOException
@@ -33,7 +34,7 @@ class StartActivity : AppCompatActivity(), OnClickDialog {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
-
+        Fabric.with(this, Crashlytics())
         mStartActivity = this
 
         openImage.setOnClickListener {
@@ -83,7 +84,7 @@ class StartActivity : AppCompatActivity(), OnClickDialog {
             }
             openImageFragment.dismiss()
         } catch (ex: IOException) {
-            Toast.makeText(applicationContext, "Photo file can't be created, please try again", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, getString(R.string.stringcatch), Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -122,7 +123,6 @@ class StartActivity : AppCompatActivity(), OnClickDialog {
                         startActivity(intent)
                     }
                 } catch (e: Exception) {
-                    Log.d("FF", "onActivityResult: " + e.message)
                     e.printStackTrace()
                 }
 

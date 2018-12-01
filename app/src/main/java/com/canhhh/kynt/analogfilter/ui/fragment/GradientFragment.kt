@@ -17,8 +17,9 @@ import com.canhhh.kynt.analogfilter.ui.activity.MainActivity
 import com.canhhh.kynt.analogfilter.ui.adapter.GradientAdapter
 import com.canhhh.kynt.analogfilter.utills.BitmapHelper
 import com.canhhh.kynt.analogfilter.utills.ViewHelper
-import kynt.fpt.analogfilter.utills.UnlockManager
 import java.util.*
+import android.support.v7.widget.LinearSnapHelper
+import com.canhhh.kynt.analogfilter.utills.UnlockManager
 
 
 class GradientFragment : Fragment(),
@@ -54,7 +55,7 @@ class GradientFragment : Fragment(),
     private fun initData() {
         mFiltersList = ArrayList()
 
-        for (i in 0..29) {
+        for (i in 0..42) {
             if (i == 0) {
                 mFiltersList!!.add(MyFilter(getString(R.string.filter_normal), "file:///android_asset/gradientfilter/gradient0.png"))
             }
@@ -66,9 +67,13 @@ class GradientFragment : Fragment(),
 
 
     private fun setupRecyclerView() {
+        val snapHelper = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(mRecyclerView)
         val mLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         mRecyclerView!!.layoutManager = mLayoutManager
         mRecyclerView!!.adapter = mAdapter
+
+        //Toast.makeText(activity, "${mRecyclerView!!.firstVisibleItemPosition}", Toast.LENGTH_SHORT).show()
     }
 
 
