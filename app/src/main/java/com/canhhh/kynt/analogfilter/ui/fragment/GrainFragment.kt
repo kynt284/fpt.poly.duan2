@@ -16,8 +16,8 @@ import com.canhhh.kynt.analogfilter.event.OnClickDialog
 import com.canhhh.kynt.analogfilter.ui.activity.MainActivity
 import com.canhhh.kynt.analogfilter.ui.adapter.GrainAdapter
 import com.canhhh.kynt.analogfilter.utills.BitmapHelper
+import com.canhhh.kynt.analogfilter.utills.UnlockManager
 import com.canhhh.kynt.analogfilter.utills.ViewHelper
-import kynt.fpt.analogfilter.utills.UnlockManager
 
 
 class GrainFragment : Fragment(),

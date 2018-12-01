@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(),
 
 
     private var filtersListFragment: FiltersFragment? = null
-    private var mRotate = 90
+    private var mRotate = 0
     private var mFlip = 180
     var alphaFilter = 1
     var mAlphaGradient = 1
@@ -304,22 +304,48 @@ class MainActivity : AppCompatActivity(),
         }
 
 
+        fun rotateLeft() {
+            val a = mRotate + 45
+            mRotate = a + 45
+            if(mRotate == 360) mRotate = 0
+        }
+
+        fun rotateRight() {
+            val a = mRotate - 45
+            mRotate = a - 45
+            if(mRotate == 360) mRotate = 0
+        }
+
+        fun flipHor() {
+            val a = mFlip - 90
+            mFlip = a - 90
+            if(mFlip == 360) mFlip = 0
+        }
+
+        fun flipVer() {
+            val a = mFlip + 90
+            mFlip = a + 90
+            if(mFlip == 360) mFlip = 0
+        }
+
         rotateLeftImageView.setOnClickListener {
-            val rotate = mRotate.unaryPlus()
-            preViewImageView.rotation = (mRotate + rotate).toFloat()
+            rotateRight()
+            preViewImageView.rotation = mRotate.toFloat()
             finalBitmap = (preViewImageView.drawable as BitmapDrawable).bitmap
             preViewImageView.setImageBitmap(finalBitmap)
         }
 
 
         rotateRightImageView.setOnClickListener {
-            val rotate = mRotate.unaryMinus()
-            preViewImageView.rotation = (mRotate + rotate).toFloat()
+            rotateLeft()
+            preViewImageView.rotation = mRotate.toFloat()
+            finalBitmap = (preViewImageView.drawable as BitmapDrawable).bitmap
+            preViewImageView.setImageBitmap(finalBitmap)
         }
 
         flipHorImageView.setOnClickListener {
-            val flip = mFlip.unaryPlus()
-            preViewImageView.rotationX = (mFlip+flip).toFloat()
+            flipHor()
+            preViewImageView.rotationX = mFlip.toFloat()
             finalBitmap = (preViewImageView.drawable as BitmapDrawable).bitmap
             preViewImageView.setImageBitmap(finalBitmap)
         }
@@ -327,8 +353,8 @@ class MainActivity : AppCompatActivity(),
         
 
         flipVerImageView.setOnClickListener {
-            val flip = mFlip.unaryMinus()
-            preViewImageView.rotationY = (mFlip+flip).toFloat()
+            flipVer()
+            preViewImageView.rotationY = mFlip.toFloat()
             finalBitmap = (preViewImageView.drawable as BitmapDrawable).bitmap
             preViewImageView.setImageBitmap(finalBitmap)
         }

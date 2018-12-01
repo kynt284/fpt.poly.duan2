@@ -14,8 +14,8 @@ import com.canhhh.kynt.analogfilter.R
 import com.canhhh.kynt.analogfilter.bean.MyFilter
 import com.canhhh.kynt.analogfilter.event.OnClickAdapter
 import com.canhhh.kynt.analogfilter.ui.activity.MainActivity
+import com.canhhh.kynt.analogfilter.utills.UnlockManager
 import kotlinx.android.synthetic.main.activity_main.*
-import kynt.fpt.analogfilter.utills.UnlockManager
 
 
 class LightAdapter(var mContext: Context, var mFilters: List<MyFilter>, var mClickAdapter: OnClickAdapter)

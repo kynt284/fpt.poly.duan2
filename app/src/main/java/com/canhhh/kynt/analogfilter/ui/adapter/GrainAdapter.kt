@@ -14,8 +14,8 @@ import com.canhhh.kynt.analogfilter.R
 import com.canhhh.kynt.analogfilter.bean.MyFilter
 import com.canhhh.kynt.analogfilter.event.OnClickAdapter
 import com.canhhh.kynt.analogfilter.ui.activity.MainActivity
+import com.canhhh.kynt.analogfilter.utills.UnlockManager
 import kotlinx.android.synthetic.main.activity_main.*
-import kynt.fpt.analogfilter.utills.UnlockManager
 
 
 class GrainAdapter(private val mContext: Context, private val mFilters: List<MyFilter>, private val mClickAdapter: OnClickAdapter) : RecyclerView.Adapter<GrainAdapter.ViewHolder>() {
