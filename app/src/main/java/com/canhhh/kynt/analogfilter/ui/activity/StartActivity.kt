@@ -4,6 +4,7 @@ package com.canhhh.kynt.analogfilter.ui.activity
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -11,25 +12,22 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
+import android.view.WindowManager
 import android.widget.Toast
 import com.canhhh.kynt.analogfilter.R
-import com.canhhh.kynt.analogfilter.event.OnClickDialog
-import com.canhhh.kynt.analogfilter.ui.dialog.ChooseDialogFragmentStart
 import com.canhhh.kynt.analogfilter.utills.ViewHelper
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_start.*
 import java.io.File
-import java.io.IOException
+import android.widget.TextView
 
 
-class StartActivity : AppCompatActivity(), OnClickDialog {
-
-
+class StartActivity : AppCompatActivity() {
     private var photoURI: Uri? = null
     lateinit var pictureFilePath: String
-    private lateinit var openImageFragment : ChooseDialogFragmentStart
-
+    private val openCAMERA = 99
+    private val openGRARYLE = 98
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,81 +35,70 @@ class StartActivity : AppCompatActivity(), OnClickDialog {
         Fabric.with(this, Crashlytics())
         mStartActivity = this
 
-        openImage.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this@StartActivity,
-                        arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        2)
-            } else {
-                showDialog()
-            }
+        imageView.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(this@StartActivity, arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 2)
+            else openCamera()
+        }
+
+        imageView2.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(this@StartActivity, arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 2)
+            else openGra()
+        }
+
+        setFont(0, logoTextView)
+        setFont(1, cameraTextView)
+        setFont(1, galleryTextView)
+        setFont(2, clickOpenTextView)
+        setFont(1, copyrightTextView)
+
+    }
+
+    fun setFont(font:Int, textView: TextView){
+        if (font==0) {
+            val type = Typeface.createFromAsset(assets, "fonts/kaushan.ttf")
+            textView.typeface = type
+        } else if (font == 1){
+            val type = Typeface.createFromAsset(assets, "fonts/opensans.ttf")
+            textView.typeface = type
+        } else {
+            val type = Typeface.createFromAsset(assets, "fonts/openransregular.ttf")
+            textView.typeface = type
         }
     }
 
-
-
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            2 -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    showDialog()
-                }
-            }
-        }
-    }
-
-
-    private fun showDialog() {
-        openImageFragment = ChooseDialogFragmentStart(this)
-        openImageFragment.show(supportFragmentManager, "openImageFragment")
-    }
-
-
-    override fun onClickLeft() {
+    private fun openCamera(){
         try {
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
             cameraIntent.putExtra(MediaStore.EXTRA_FINISH_ON_COMPLETION, false)
-
             if (cameraIntent.resolveActivity(packageManager) != null) {
                 val pictureFile: File?
                 pictureFile = ViewHelper().storage2(this@StartActivity)
-
                 photoURI = FileProvider.getUriForFile(this@StartActivity, getString(R.string.str_provider), pictureFile)
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                startActivityForResult(cameraIntent, 99)
+                startActivityForResult(cameraIntent, openCAMERA)
             }
-            openImageFragment.dismiss()
-        } catch (ex: IOException) {
+        }catch (e: java.lang.Exception){
             Toast.makeText(applicationContext, getString(R.string.stringcatch), Toast.LENGTH_SHORT).show()
         }
-
     }
 
-
-    override fun onClickRight() {
+    private fun openGra(){
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, 98)
-        openImageFragment.dismiss()
+        startActivityForResult(intent, openGRARYLE)
     }
-
-
-    override fun onClickExit() {
-
-    }
-
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            98 -> if (data != null) {
+            openGRARYLE -> if (data != null) {
                 val intent = Intent(this@StartActivity, MainActivity::class.java)
                 intent.putExtra("GALLERY", "GALLERY")
                 intent.data = data.data
                 startActivity(intent)
             }
 
-            99 -> if (data != null || photoURI != null) {
+            openCAMERA -> if (data != null || photoURI != null) {
                 val imgFile = File(pictureFilePath)
                 try {
                     val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(imgFile))
@@ -125,12 +112,9 @@ class StartActivity : AppCompatActivity(), OnClickDialog {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-
             }
         }
-
     }
-
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -142,5 +126,10 @@ class StartActivity : AppCompatActivity(), OnClickDialog {
         fun share(): StartActivity {
             return mStartActivity
         }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 }

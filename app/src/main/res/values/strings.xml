@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Analog Filter</string>
+    <string name="app_name">Analog</string>
 
     <string name="tab_filters">Filters</string>
     <string name="edit">Edit</string>

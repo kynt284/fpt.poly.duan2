@@ -27,7 +27,6 @@ import android.view.WindowManager
 import android.widget.SeekBar
 import android.widget.Toast
 import com.canhhh.kynt.analogfilter.R
-import com.canhhh.kynt.analogfilter.R.id.direct
 import com.canhhh.kynt.analogfilter.event.FiltersListFragmentListener
 import com.canhhh.kynt.analogfilter.event.OnClickDialog
 import com.canhhh.kynt.analogfilter.ui.adapter.ViewPagerAdapter
@@ -49,13 +48,11 @@ import com.zomato.photofilters.imageprocessors.subfilters.VignetteSubfilter
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.*
 
-
 @SuppressLint("StaticFieldLeak")
 class MainActivity : AppCompatActivity(),
     FiltersListFragmentListener,
         SeekBar.OnSeekBarChangeListener,
     OnClickDialog {
-
 
     private var filtersListFragment: FiltersFragment? = null
     private var mRotate = 0
@@ -80,9 +77,7 @@ class MainActivity : AppCompatActivity(),
     private var contrastBitmap: Bitmap? = null
     private var vignetteBitmap: Bitmap? = null
     private var brightBitmap: Bitmap? = null
-
     private var photoURI: Uri? = null
-
     private var checkRecyclerStartAct = false
     private var isRecyclerBright = false
     private var isRecyclerVignette = false
@@ -96,42 +91,31 @@ class MainActivity : AppCompatActivity(),
     private lateinit var mOriginalBitmap: Bitmap
     private lateinit var finalBitmap: Bitmap
     private lateinit var listSeekBar: Array<SeekBar>
-    private var exitDialogFragment : ExitDialogFragment? = null
+    private var exitDialogFragment: ExitDialogFragment? = null
 
     private val tabIcons = intArrayOf(
-        R.drawable.ic_auto_fix,
-            R.drawable.ic_pencil, R.drawable.ic_gradient,
-            R.drawable.ic_grain, R.drawable.ic_flash_circle)
-
-
-
+        R.drawable.ic_auto_fix, R.drawable.ic_pencil, R.drawable.ic_gradient, R.drawable.ic_grain, R.drawable.ic_flash_circle
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         initData()
         loadImage()
         setupViewPager()
-
         setupWidget()
         attachEvent()
         mainShare = this
-
     }
-
 
     private fun initData() {
-        listSeekBar = arrayOf(contrastSeekBar, saturationSeekBar, brightnessSeekBar, vignetteSeekBar, alphaFilterSeekBar, alphaGradientSeekBar, alphaGrainSeekBar, alphaLightSeekBar)
+        listSeekBar = arrayOf(contrastSeekBar, saturationSeekBar, brightnessSeekBar,
+            vignetteSeekBar, alphaFilterSeekBar, alphaGradientSeekBar, alphaGrainSeekBar, alphaLightSeekBar)
     }
 
-
     private fun loadImage() {
-        if (checkRecyclerStartAct) {
-            resetBitmap()
-        } else {
-            Log.d("YYY", "loadImage: ")
-        }
+        if (checkRecyclerStartAct) resetBitmap()
+        else Log.d("YYY", "loadImage: ")
 
         if (intent.data != null) {
             if (intent.getStringExtra("GALLERY").equals("GALLERY", ignoreCase = true)) {
@@ -157,23 +141,16 @@ class MainActivity : AppCompatActivity(),
                     finalBitmap = mOriginalBitmap.copy(Bitmap.Config.ARGB_8888, true)
                     preViewImageView.setImageBitmap(finalBitmap)
                     checkRecyclerStartAct = true
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
+                } catch (e: Exception) { e.printStackTrace()}
             }
-
         } else {
             mOriginalBitmap = BitmapHelper().getBitmapFromAssets(this, IMAGE_NAME, 1080, 1920)!!
             finalBitmap = mOriginalBitmap.copy(Bitmap.Config.ARGB_8888, true)
             preViewImageView.setImageBitmap(mOriginalBitmap)
         }
-
     }
 
-
     private fun setupViewPager() {
-
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
         filtersListFragment = FiltersFragment()
@@ -198,7 +175,6 @@ class MainActivity : AppCompatActivity(),
         setupTabIcons()
     }
 
-
     private fun setupTabIcons() {
         tabs.getTabAt(0)!!.setIcon(tabIcons[0])
         tabs.getTabAt(1)!!.setIcon(tabIcons[1])
@@ -207,11 +183,9 @@ class MainActivity : AppCompatActivity(),
         tabs.getTabAt(4)!!.setIcon(tabIcons[4])
     }
 
-
     private fun setupWidget() {
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-
                 mTabPosition = tab.position
                 if (mTabPosition == 0) {
                     goneSeekBar()
@@ -219,31 +193,24 @@ class MainActivity : AppCompatActivity(),
                 }
             }
 
-
             override fun onTabUnselected(tab: TabLayout.Tab) {
                 goneSeekBar()
                 cropLinearLayout.visibility = View.GONE
             }
 
-
-            override fun onTabReselected(tab: TabLayout.Tab) {
-
-            }
+            override fun onTabReselected(tab: TabLayout.Tab) {}
         })
-
         if (mTabPosition == 0) {
             goneSeekBar()
             cropLinearLayout.visibility = View.GONE
         }
 
         setupSeekBar()
-
         viewpager.offscreenPageLimit = 5
     }
 
 
     private fun setupSeekBar() {
-
         alphaGrainSeekBar.setOnSeekBarChangeListener(this)
         alphaLightSeekBar.setOnSeekBarChangeListener(this)
         alphaGradientSeekBar.setOnSeekBarChangeListener(this)
@@ -255,29 +222,21 @@ class MainActivity : AppCompatActivity(),
 
         alphaGrainSeekBar.progress = 100
         alphaGrainSeekBar.max = 255
-
         alphaLightSeekBar.progress = 100
         alphaLightSeekBar.max = 255
-
         alphaGradientSeekBar.progress = 100
         alphaGradientSeekBar.max = 255
-
         alphaFilterSeekBar.progress = 100
         alphaFilterSeekBar.max = 255
-
         saturationSeekBar.progress = 10
         saturationSeekBar.max = 30
-
         contrastSeekBar.progress = 10
         contrastSeekBar.max = 100
-
         brightnessSeekBar.progress = 100
         brightnessSeekBar.max = 200
-
         vignetteSeekBar.progress = 0
         vignetteSeekBar.max = 255
     }
-
 
     private fun resetDefault() {
         alphaGrainSeekBar.progress = 100
@@ -290,19 +249,14 @@ class MainActivity : AppCompatActivity(),
         vignetteSeekBar.progress = 0
     }
 
-
     private fun attachEvent() {
-
         cameraImageView!!.setOnClickListener {
             if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this@MainActivity,
                         arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
                         2)
-            } else {
-                showDialog()
-            }
+            } else showDialog()
         }
-
 
         fun rotateLeft() {
             val a = mRotate + 45
@@ -335,7 +289,6 @@ class MainActivity : AppCompatActivity(),
             preViewImageView.setImageBitmap(finalBitmap)
         }
 
-
         rotateRightImageView.setOnClickListener {
             rotateLeft()
             preViewImageView.rotation = mRotate.toFloat()
@@ -350,8 +303,6 @@ class MainActivity : AppCompatActivity(),
             preViewImageView.setImageBitmap(finalBitmap)
         }
 
-        
-
         flipVerImageView.setOnClickListener {
             flipVer()
             preViewImageView.rotationY = mFlip.toFloat()
@@ -365,23 +316,17 @@ class MainActivity : AppCompatActivity(),
         }
 
         shareImageView.setOnClickListener { saveImageToGallery() }
-
         val l = MyTouchListener()
-
         compareImageView.setOnTouchListener(l)
 
     }
-
-    
 
     private fun showDialog() {
         val warningDialogFragment = ChoosePagerDialogFragment(this)
         warningDialogFragment.show(supportFragmentManager, getString(R.string.warningDialogFragment))
     }
 
-
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
         when (requestCode) {
             GET_IMAGE_GALLERY -> if (data != null) {
                 resetBitmap()
@@ -396,9 +341,7 @@ class MainActivity : AppCompatActivity(),
                     filtersListFragment!!.prepareThumbnail(mOriginalBitmap)
                 }).start()
 
-            } else {
-                preViewImageView.setImageBitmap(finalBitmap)
-            }
+            } else preViewImageView.setImageBitmap(finalBitmap)
 
             GET_IMAGE_CAMERA -> if (data != null || photoURI != null) {
                 val imgFile = File(pictureFilePath!!)
@@ -414,24 +357,15 @@ class MainActivity : AppCompatActivity(),
                             preViewImageView.setImageBitmap(finalBitmap)
                             filtersListFragment!!.prepareThumbnail(mOriginalBitmap)
                         }).start()
-
-                    } else {
-                        preViewImageView.setImageBitmap(finalBitmap)
-                    }
+                    } else preViewImageView.setImageBitmap(finalBitmap)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-
-            } else {
-                preViewImageView.setImageBitmap(finalBitmap)
-            }
+            } else preViewImageView.setImageBitmap(finalBitmap)
         }
-
     }
 
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-
         when (requestCode) {
             2 -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -441,12 +375,10 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
-
 
     override fun onFilterSelected(filter: Filter) {
         finalBitmap = mOriginalBitmap.copy(Bitmap.Config.ARGB_8888, true)
@@ -454,13 +386,11 @@ class MainActivity : AppCompatActivity(),
         AddFilterUnderground(applicationContext).execute()
     }
 
-
     private fun selectPage() {
         tabs.setScrollPosition(0, 0f, true)
         viewpager.currentItem = 0
         filtersListFragment!!.prepareThumbnail(mOriginalBitmap)
     }
-
 
     override fun onClickLeft() {
         try {
@@ -479,9 +409,7 @@ class MainActivity : AppCompatActivity(),
         } catch (ex: IOException) {
             Toast.makeText(applicationContext, getString(R.string.toas1), Toast.LENGTH_SHORT).show()
         }
-
     }
-
 
     override fun onClickRight() {
         selectPage()
@@ -489,42 +417,35 @@ class MainActivity : AppCompatActivity(),
         startActivityForResult(intent, GET_IMAGE_GALLERY)
     }
 
-
     override fun onClickExit() {
         exitDialogFragment!!.dismiss()
         super@MainActivity.onBackPressed()
     }
-
 
     fun cropImage() {
         cropLinearLayout.visibility = View.VISIBLE
         goneSeekBar()
     }
 
-
     fun clickEditContrast() {
         cropLinearLayout.visibility = View.GONE
         isVisibleSeekBar(0)
     }
-
 
     fun clickEditSaturation() {
         cropLinearLayout.visibility = View.GONE
         isVisibleSeekBar(1)
     }
 
-
     fun clickEditBrightness() {
         cropLinearLayout.visibility = View.GONE
         isVisibleSeekBar(2)
     }
 
-
     fun clickEditVignette() {
         cropLinearLayout.visibility = View.GONE
         isVisibleSeekBar(3)
     }
-
 
     private fun isVisibleSeekBar(positionVisible: Int) {
         for (i in listSeekBar.indices) {
@@ -535,16 +456,13 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-
     fun goneSeekBar() {
         for (gone: SeekBar in listSeekBar) {
             gone.visibility = View.GONE
         }
     }
 
-
     override fun onStartTrackingTouch(seekBar: SeekBar) {}
-
 
     override fun onProgressChanged(seekBar: SeekBar, progress: Int, b: Boolean) {
         var progress: Int = progress
@@ -556,22 +474,14 @@ class MainActivity : AppCompatActivity(),
             }
 
             R.id.saturationSeekBar -> mSaturationFinal = .10f * progress
-
             R.id.brightnessSeekBar -> mBrightnessFinal = progress - 100
-
             R.id.vignetteSeekBar -> mVignetteFinal = progress
-
             R.id.alphaLightSeekBar -> mAlphaLight = progress
-
             R.id.alphaGradientSeekBar -> mAlphaGradient = progress
-
             R.id.alphaGrainSeekBar -> mAlphaGrain = progress
-
             R.id.alphaFilterSeekBar -> alphaFilter = progress
         }
-
     }
-
 
     override fun onStopTrackingTouch(seekBar: SeekBar) {
         onContrastChanged()
@@ -581,56 +491,44 @@ class MainActivity : AppCompatActivity(),
         AddFilterUnderground(applicationContext).execute()
     }
 
-
     private fun onContrastChanged() {
         contrastBitmap = mOriginalBitmap
     }
-
 
     private fun onSaturationChanged() {
         saturationBitmap = mOriginalBitmap
     }
 
-
     private fun onBrightnessChanged() {
         brightBitmap = mOriginalBitmap
     }
 
-
     private fun onVignetteChanged() {
         vignetteBitmap = mOriginalBitmap
     }
-
 
     fun addGrain(newBitmap: Bitmap?) {
         grainBitmap = newBitmap
         AddFilterUnderground(applicationContext).execute()
     }
 
-
     fun addGradient(newBitmap: Bitmap?) {
         gradientBitmap = newBitmap
         AddFilterUnderground(applicationContext).execute()
     }
-
 
     fun addLight(newBitmap: Bitmap?) {
         lightBitmap = newBitmap
         AddFilterUnderground(applicationContext).execute()
     }
 
-
     private inner class AddFilterUnderground internal constructor(var mContext: Context) : AsyncTask<Void, Bitmap, Bitmap>() {
-
-
         override fun onPreExecute() {
             super.onPreExecute()
             progressBar.visibility = View.VISIBLE
         }
 
-
         override fun doInBackground(vararg integers: Void): Bitmap? {
-
             var bitmap = mOriginalBitmap
             val myFilter = Filter()
 
@@ -673,7 +571,6 @@ class MainActivity : AppCompatActivity(),
             return bitmap
         }
 
-
         override fun onPostExecute(bitmap: Bitmap) {
             super.onPostExecute(bitmap)
             preViewImageView.setImageBitmap(Filter().processFilter(bitmap))
@@ -682,30 +579,19 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-
     private fun saveImageToGallery() {
-
         Dexter.withActivity(this).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport) {
-
-                        if (report.areAllPermissionsGranted()) {
-                            SaveImage(this@MainActivity).execute()
-                        } else {
-                            Toast.makeText(applicationContext, getString(R.string.permission), Toast.LENGTH_SHORT).show()
-                        }
+                        if (report.areAllPermissionsGranted()) SaveImage(this@MainActivity).execute()
+                        else Toast.makeText(applicationContext, getString(R.string.permission), Toast.LENGTH_SHORT).show()
                     }
-
 
                     override fun onPermissionRationaleShouldBeShown(permissions: List<com.karumi.dexter.listener.PermissionRequest>, token: PermissionToken) {
-
                         token.continuePermissionRequest()
                     }
-
-
                 }).check()
     }
-
 
     private fun resetBitmap() {
         if (isRecyclerBright) {
@@ -740,21 +626,17 @@ class MainActivity : AppCompatActivity(),
             gradientBitmap = null
             isRecyclerGradient = false
         }
-
         finalBitmap.recycle()
         mOriginalBitmap.recycle()
     }
-
 
     override fun onBackPressed() {
         exitDialogFragment = ExitDialogFragment(this)
         exitDialogFragment!!.show(supportFragmentManager, getString(R.string.exitDialogFragment))
     }
 
-
     private inner class SaveImage internal constructor(mContext: Context?) : AsyncTask<Void, String, String>() {
         private val dialog: ProgressDialog = ProgressDialog(mContext)
-
 
         override fun onPreExecute() {
             super.onPreExecute()
@@ -768,12 +650,10 @@ class MainActivity : AppCompatActivity(),
             dialog.show()
         }
 
-
         override fun doInBackground(vararg voids: Void): String? {
             val filePath = Environment.getExternalStorageDirectory().toString() + "/Analog Filter"
             try {
                 val bitmap = finalBitmap
-
                 val byteOutputStream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteOutputStream)
                 val bitmapData = byteOutputStream.toByteArray()
@@ -786,12 +666,8 @@ class MainActivity : AppCompatActivity(),
                 }
 
                 val fileName = "IMG_" + System.currentTimeMillis() + ".jpg"
-
                 val file = File(File(filePath), fileName)
-
-                if (file.exists()) {
-                    file.delete()
-                }
+                if (file.exists()) file.delete()
 
                 val outputStream = FileOutputStream(file)
                 byteOutputStream.writeTo(outputStream)
@@ -800,20 +676,16 @@ class MainActivity : AppCompatActivity(),
                 var totalWritten = 0
                 var bufferedBytes = 0
 
-
                 while (inputStream.read(buffer).also { bufferedBytes = it } >= 0) {
                     outputStream.write(buffer, 0, bufferedBytes)
                     totalWritten += bufferedBytes
                     publishProgress(Integer.toString(totalWritten * 100 / lengthOfFile))
                 }
-
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
             return null
         }
-
 
         override fun onProgressUpdate(vararg values: String) {
             super.onProgressUpdate(*values)
@@ -821,30 +693,24 @@ class MainActivity : AppCompatActivity(),
             dialog.progress = Integer.parseInt(values[0])
         }
 
-
         override fun onPostExecute(path: String?) {
             super.onPostExecute(path)
             dialog.dismiss()
-
             doneImageView.visibility = View.VISIBLE
             Handler().postDelayed({ doneImageView.visibility = View.GONE }, 2200)
         }
     }
 
-
     private inner class MyTouchListener : View.OnTouchListener {
         @SuppressLint("ClickableViewAccessibility")
         override fun onTouch(v: View, event: MotionEvent): Boolean {
-
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> preViewImageView.setImageBitmap(mOriginalBitmap)
-
                 MotionEvent.ACTION_UP -> preViewImageView.setImageBitmap(finalBitmap)
             }
             return true
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -853,11 +719,8 @@ class MainActivity : AppCompatActivity(),
         checkRecyclerStartAct = false
     }
 
-
     companion object {
-        init {
-            System.loadLibrary("NativeImageProcessor")
-        }
+        init { System.loadLibrary("NativeImageProcessor") }
 
         const val IMAGE_NAME = "landscape3.jpg"
         private const val GET_IMAGE_CAMERA = 99
@@ -869,7 +732,5 @@ class MainActivity : AppCompatActivity(),
             return mainShare
         }
     }
-
-
 }
 
