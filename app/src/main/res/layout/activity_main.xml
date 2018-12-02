@@ -83,6 +83,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         app:tabBackground="@color/colorPrimary"
         app:tabGravity="fill"
+        app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
         app:tabIndicatorColor="@android:color/white"
         app:tabMode="fixed"
         app:tabSelectedTextColor="@android:color/white"

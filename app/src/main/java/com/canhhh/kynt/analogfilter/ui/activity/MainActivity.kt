@@ -49,10 +49,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.*
 
 @SuppressLint("StaticFieldLeak")
-class MainActivity : AppCompatActivity(),
-    FiltersListFragmentListener,
-        SeekBar.OnSeekBarChangeListener,
-    OnClickDialog {
+class MainActivity : AppCompatActivity(), FiltersListFragmentListener, SeekBar.OnSeekBarChangeListener, OnClickDialog {
 
     private var filtersListFragment: FiltersFragment? = null
     private var mRotate = 0
@@ -94,7 +91,11 @@ class MainActivity : AppCompatActivity(),
     private var exitDialogFragment: ExitDialogFragment? = null
 
     private val tabIcons = intArrayOf(
-        R.drawable.ic_auto_fix, R.drawable.ic_pencil, R.drawable.ic_gradient, R.drawable.ic_grain, R.drawable.ic_flash_circle
+        R.drawable.ic_auto_fix,
+        R.drawable.ic_pencil,
+        R.drawable.ic_gradient,
+        R.drawable.ic_grain,
+        R.drawable.ic_flash_circle
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,8 +110,10 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun initData() {
-        listSeekBar = arrayOf(contrastSeekBar, saturationSeekBar, brightnessSeekBar,
-            vignetteSeekBar, alphaFilterSeekBar, alphaGradientSeekBar, alphaGrainSeekBar, alphaLightSeekBar)
+        listSeekBar = arrayOf(
+            contrastSeekBar, saturationSeekBar, brightnessSeekBar,
+            vignetteSeekBar, alphaFilterSeekBar, alphaGradientSeekBar, alphaGrainSeekBar, alphaLightSeekBar
+        )
     }
 
     private fun loadImage() {
@@ -141,7 +144,9 @@ class MainActivity : AppCompatActivity(),
                     finalBitmap = mOriginalBitmap.copy(Bitmap.Config.ARGB_8888, true)
                     preViewImageView.setImageBitmap(finalBitmap)
                     checkRecyclerStartAct = true
-                } catch (e: Exception) { e.printStackTrace()}
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         } else {
             mOriginalBitmap = BitmapHelper().getBitmapFromAssets(this, IMAGE_NAME, 1080, 1920)!!
@@ -251,35 +256,45 @@ class MainActivity : AppCompatActivity(),
 
     private fun attachEvent() {
         cameraImageView!!.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this@MainActivity,
-                        arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        2)
+            if (ContextCompat.checkSelfPermission(
+                    applicationContext,
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this@MainActivity,
+                    arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ),
+                    2
+                )
             } else showDialog()
         }
 
         fun rotateLeft() {
             val a = mRotate + 45
             mRotate = a + 45
-            if(mRotate == 360) mRotate = 0
+            if (mRotate == 360) mRotate = 0
         }
 
         fun rotateRight() {
             val a = mRotate - 45
             mRotate = a - 45
-            if(mRotate == 360) mRotate = 0
+            if (mRotate == 360) mRotate = 0
         }
 
         fun flipHor() {
             val a = mFlip - 90
             mFlip = a - 90
-            if(mFlip == 360) mFlip = 0
+            if (mFlip == 360) mFlip = 0
         }
 
         fun flipVer() {
             val a = mFlip + 90
             mFlip = a + 90
-            if(mFlip == 360) mFlip = 0
+            if (mFlip == 360) mFlip = 0
         }
 
         rotateLeftImageView.setOnClickListener {
@@ -472,7 +487,6 @@ class MainActivity : AppCompatActivity(),
                 progress += 90
                 mContrastFinal = 0.01f * progress
             }
-
             R.id.saturationSeekBar -> mSaturationFinal = .10f * progress
             R.id.brightnessSeekBar -> mBrightnessFinal = progress - 100
             R.id.vignetteSeekBar -> mVignetteFinal = progress
@@ -522,7 +536,8 @@ class MainActivity : AppCompatActivity(),
         AddFilterUnderground(applicationContext).execute()
     }
 
-    private inner class AddFilterUnderground internal constructor(var mContext: Context) : AsyncTask<Void, Bitmap, Bitmap>() {
+    private inner class AddFilterUnderground internal constructor(var mContext: Context) :
+        AsyncTask<Void, Bitmap, Bitmap>() {
         override fun onPreExecute() {
             super.onPreExecute()
             progressBar.visibility = View.VISIBLE
@@ -580,17 +595,21 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun saveImageToGallery() {
-        Dexter.withActivity(this).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport) {
-                        if (report.areAllPermissionsGranted()) SaveImage(this@MainActivity).execute()
-                        else Toast.makeText(applicationContext, getString(R.string.permission), Toast.LENGTH_SHORT).show()
-                    }
+        Dexter.withActivity(this)
+            .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            .withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
+                    if (report.areAllPermissionsGranted()) SaveImage(this@MainActivity).execute()
+                    else Toast.makeText(applicationContext, getString(R.string.permission), Toast.LENGTH_SHORT).show()
+                }
 
-                    override fun onPermissionRationaleShouldBeShown(permissions: List<com.karumi.dexter.listener.PermissionRequest>, token: PermissionToken) {
-                        token.continuePermissionRequest()
-                    }
-                }).check()
+                override fun onPermissionRationaleShouldBeShown(
+                    permissions: List<com.karumi.dexter.listener.PermissionRequest>,
+                    token: PermissionToken
+                ) {
+                    token.continuePermissionRequest()
+                }
+            }).check()
     }
 
     private fun resetBitmap() {
@@ -720,7 +739,9 @@ class MainActivity : AppCompatActivity(),
     }
 
     companion object {
-        init { System.loadLibrary("NativeImageProcessor") }
+        init {
+            System.loadLibrary("NativeImageProcessor")
+        }
 
         const val IMAGE_NAME = "landscape3.jpg"
         private const val GET_IMAGE_CAMERA = 99
@@ -733,4 +754,3 @@ class MainActivity : AppCompatActivity(),
         }
     }
 }
-
