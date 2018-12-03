@@ -50,7 +50,6 @@ import java.io.*
 
 @SuppressLint("StaticFieldLeak")
 class MainActivity : AppCompatActivity(), FiltersListFragmentListener, SeekBar.OnSeekBarChangeListener, OnClickDialog {
-
     private var filtersListFragment: FiltersFragment? = null
     private var mRotate = 0
     private var mFlip = 180
@@ -716,7 +715,12 @@ class MainActivity : AppCompatActivity(), FiltersListFragmentListener, SeekBar.O
             super.onPostExecute(path)
             dialog.dismiss()
             doneImageView.visibility = View.VISIBLE
-            Handler().postDelayed({ doneImageView.visibility = View.GONE }, 2200)
+            Handler().postDelayed({
+                doneImageView.visibility = View.GONE
+                val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
+                sharingIntent.type = "image/*"
+                startActivity(Intent.createChooser(sharingIntent, "Share via"))
+            }, 2200)
         }
     }
 
